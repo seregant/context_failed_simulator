@@ -1,0 +1,65 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: context-cancel-svc
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: context-cancel-svc
+    spec:
+      containers:
+      - name: context-cancel-svc
+        image: gcr.io/xplorin-devel/exploration:context-cancel-svc
+        ports:
+        - containerPort: 2121
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: gcr-json-key
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: context-cancel-tpy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: context-cancel-tpy
+    spec:
+      containers:
+      - name: context-cancel-tpy
+        image: gcr.io/xplorin-devel/exploration:context-cancel-tpy 
+        ports:
+        - containerPort: 2222
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: gcr-json-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-fail
+spec:
+  ports:
+     -  port: 2121
+        protocol: TCP
+        targetPort: 2121
+  selector:
+    app: context-cancel-svc
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-fail-thirdparty     
+spec:
+  ports:
+     -  port: 2222
+        protocol: TCP
+        targetPort: 2222
+  selector:
+    app: context-cancel-tpy
+  type: NodePort

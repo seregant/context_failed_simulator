@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <button id="btn">Do GET request</button>
+    <button id="btn2">Do POST request</button>
+    <script>
+        $(function () {
+            alert('open browser console to see the result')    
+        });
+        $('#btn').click(function(e){
+            $('#btn').attr('disabled','disabled')
+            $.ajax({
+                url: 'http://localhost:2020',
+                method: "GET",
+                // timeout: 300000,
+                // error: function(jqXHR, textStatus, errorThrown) {
+                //     alert(textStatus)
+                // },
+                xhrFields: { withCredentials: false },
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            }).done(function(result) {
+                $('#btn').removeAttr('disabled')
+                console.log(result)
+            }).fail(function(e){
+                $('#btn').removeAttr('disabled')
+                console.log(e)
+            })
+        })
+        $('#btn2').click(function(e){
+            $('#btn2').attr('disabled','disabled')
+            $.ajax({
+                url: 'http://localhost:2020',
+                method: "POST",
+                // timeout: 15000,
+                // error: function(jqXHR, textStatus, errorThrown) {
+                //     alert(textStatus)
+                // },
+                xhrFields: { withCredentials: false },
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify({"name":"Gavin","address":"Madiun"})
+            }).done(function(result) {
+                $('#btn2').removeAttr('disabled')
+                console.log(result)
+            }).fail(function(e){
+                $('#btn2').removeAttr('disabled')
+                console.log(e)
+            })
+        })
+    </script>
+</body>
+</html>
